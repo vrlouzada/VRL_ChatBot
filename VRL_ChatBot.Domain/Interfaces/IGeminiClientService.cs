@@ -1,7 +1,10 @@
-﻿namespace VRL_ChatBot.Domain.Interfaces
+﻿using VRL_Chatbot.Core.Interfaces;
+using VRL_ChatBot.Domain.Request;
+
+namespace VRL_ChatBot.Domain.Interfaces
 {
     public interface IGeminiClientService
     {
-        Task<string> GenerateContentAsync(string prompt, CancellationToken cancellationToken);
+        Task<IServiceResponse<string>> GenerateContentAsync(PromptRequest request, CancellationToken cancellationToken);
     }
 }

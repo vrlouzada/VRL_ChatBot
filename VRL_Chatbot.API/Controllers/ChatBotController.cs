@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using VRL_Chatbot.API.Controllers.Base;
+using VRL_Chatbot.Core.Common;
 using VRL_ChatBot.Domain.Interfaces;
+using VRL_ChatBot.Domain.Request;
 
 namespace VRL_Chatbot.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ChatBotController : ControllerBase
+    public class ChatBotController : BaseControler
     {
         private readonly IGeminiClientService _geminiClientService;
 
@@ -15,20 +18,32 @@ namespace VRL_Chatbot.API.Controllers
         }
 
         [HttpGet(Name = "SendMessage")]
-        public  async Task<IActionResult> SendMessage(string message, CancellationToken cancellationToken) 
+        public  async Task<IActionResult> SendMessage([FromBody] PromptRequest request, CancellationToken cancellationToken) 
         {
-            string response = string.Empty;
+            var response = new ServiceResponse<string>() { Status = false };
+
             try
             {
-                response = await _geminiClientService.GenerateContentAsync(message, cancellationToken);
+                var result = await _geminiClientService.GenerateContentAsync(request, cancellationToken);
+
+                if(result is null)
+                {
+                    response.Exception.Add("Ocorreu algum problema técnico");
+                    return BadRequest(response);
+                }
+
+                response.Data = result.Data;
+                response.Status = result.Status;
+                response.Exception = result.Exception;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                response.Status = false;
+                response.Exception.Add(ex.Message);
+                return Response(response, Core.Enum.StatusCode.BadRequest);
             }
 
-            return Response(response, );
+            return Response(response, Core.Enum.StatusCode.Success);
         }
     }
 }

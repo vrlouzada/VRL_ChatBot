@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Net.Http;
 using System.Text;
-using VRL_ChatBot.Domain.Config;
+using VRL_Chatbot.Core.Common;
+using VRL_Chatbot.Core.Interfaces;
 using VRL_ChatBot.Domain.Factory;
 using VRL_ChatBot.Domain.Interfaces;
+using VRL_ChatBot.Domain.Request;
 using VRL_ChatBot.Domain.Response;
 
 namespace VRL_ChatBot.Domain.Service
@@ -27,27 +27,37 @@ namespace VRL_ChatBot.Domain.Service
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<string> GenerateContentAsync(string prompt, CancellationToken cancellationToken)
+        public async Task<IServiceResponse<string>> GenerateContentAsync(PromptRequest request, CancellationToken cancellationToken)
         {
-            var requestBody = GeminiRequestFactory.CreateRequest(prompt);
-            var content = new StringContent(JsonConvert.SerializeObject(requestBody, _serializerSettings), Encoding.UTF8, "application/json");
+            var response = new ServiceResponse<string>() { Status = false};
 
-            var httpClient = _httpClientFactory.CreateClient("GeminiService");
-            
-            var httpResponse = await httpClient.PostAsync(httpClient.BaseAddress, content, cancellationToken);
-
-            if (!httpResponse.IsSuccessStatusCode)
+            try
             {
-                return $"ocorreu um error. Status code: {httpResponse.StatusCode}";
+                var requestBody = GeminiRequestFactory.CreateRequest(request);
+                var content = new StringContent(JsonConvert.SerializeObject(requestBody, _serializerSettings), Encoding.UTF8, "application/json");
+
+                var httpClient = _httpClientFactory.CreateClient("GeminiService");
+
+                var httpResponse = await httpClient.PostAsync(httpClient.BaseAddress, content, cancellationToken);
+
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    response.Exception.Add($"ocorreu um error. Status code: {httpResponse.StatusCode}");
+                }
+
+                var responseBody = await httpResponse.Content.ReadAsStringAsync();
+
+                var geminiResponse = JsonConvert.DeserializeObject<GeminiResponse>(responseBody);
+
+                response.Data = geminiResponse?.Candidates[0].Content.Parts[0].Text;
+                response.Status = true;
             }
-
-            var responseBody = await httpResponse.Content.ReadAsStringAsync();
-
-            var geminiResponse = JsonConvert.DeserializeObject<GeminiResponse>(responseBody);
-
-            var geminiResponseText = geminiResponse?.Candidates[0].Content.Parts[0].Text;
-
-            return geminiResponseText;
+            catch (Exception ex)
+            {
+                response.Exception.Add(ex.Message);
+            }
+            
+            return response;
         }
     }
 }

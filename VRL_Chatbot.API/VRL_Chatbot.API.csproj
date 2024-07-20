@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\VRL_Chatbot.Core\VRL_Chatbot.Core.csproj" />
     <ProjectReference Include="..\VRL_ChatBot.Domain\VRL_ChatBot.Domain.csproj" />
   </ItemGroup>
 

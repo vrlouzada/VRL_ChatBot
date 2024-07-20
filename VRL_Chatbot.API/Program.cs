@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using VRL_Chatbot.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,10 @@ builder.Services.AddService(builder.Configuration);
 builder.Services.AddGemini(builder.Configuration);
 builder.Services.AddHttpClient();
 builder.Services.AddHandlers();
+
+builder.Services.AddMvc().AddJsonOptions(_ =>
+    _.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+);
 
 var app = builder.Build();
 

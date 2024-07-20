@@ -12,4 +12,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\VRL_Chatbot.Core\VRL_Chatbot.Core.csproj" />
+  </ItemGroup>
+
 </Project>
