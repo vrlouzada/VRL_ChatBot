@@ -5,4 +5,5 @@ Esse projeto foi criado com auxilio do seguinte artigo.
 
 <b>Step-by-step: Integrating Google Gemini into ASP.NET Core project</b>
 
-![image](https://github.com/user-attachments/assets/09b4bfb3-db6a-481e-90d5-1b36f9089115)
+![image](https://github.com/user-attachments/assets/5695aeb1-95e1-4498-b66f-00758a1fd713)
+
