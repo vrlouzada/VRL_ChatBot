@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VRL_Chatbot.Core\VRL_Chatbot.Core.csproj" />
+    <ProjectReference Include="..\VRL_ChatBot.Domain\VRL_ChatBot.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
