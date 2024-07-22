@@ -4,7 +4,7 @@ namespace VRL_ChatBot.Domain.Factory
 {
     public sealed class GeminiRequestFactory
     {
-        public static GeminiRequest CreateRequest(PromptRequest request)
+        public static GeminiRequest CreateRequest(ContextoRequest request)
         {
             return new GeminiRequest
             {
@@ -17,7 +17,7 @@ namespace VRL_ChatBot.Domain.Factory
                     {
                         new GeminiPart
                         {
-                            Text = request.Prompt
+                            Text = request.Mensagem
                         }
                     }
                 }

@@ -27,7 +27,7 @@ namespace VRL_ChatBot.Domain.Service
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<IServiceResponse<string>> GenerateContentAsync(PromptRequest request, CancellationToken cancellationToken)
+        public async Task<IServiceResponse<string>> GenerateContentAsync(ContextoRequest request, CancellationToken cancellationToken)
         {
             var response = new ServiceResponse<string>() { Status = false};
 

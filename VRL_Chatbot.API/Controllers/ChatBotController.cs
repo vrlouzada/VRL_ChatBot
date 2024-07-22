@@ -17,8 +17,8 @@ namespace VRL_Chatbot.API.Controllers
             _geminiClientService = geminiClientService;
         }
 
-        [HttpGet(Name = "SendMessage")]
-        public  async Task<IActionResult> SendMessage([FromBody] PromptRequest request, CancellationToken cancellationToken) 
+        [HttpPost(Name = "SendMessage")]
+        public  async Task<IActionResult> SendMessage([FromBody] ContextoRequest request, CancellationToken cancellationToken) 
         {
             var response = new ServiceResponse<string>() { Status = false };
 
